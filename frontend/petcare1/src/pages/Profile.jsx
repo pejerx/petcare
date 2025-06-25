@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Profile.css';
 import { TextField, Button, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import {
+  getAppointments,
+  updateAppointment,
+  deleteAppointment,
+} from '../api/appointment';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -14,67 +19,65 @@ const Profile = () => {
     country: 'Philippines',
   });
 
-  const [pets] = useState([
-    { name: 'Jacob', breed: 'Golden Retriever' }
-  ]);
+  const [pets] = useState([{ name: 'Jacob', breed: 'Golden Retriever' }]);
+  const [history, setHistory] = useState([]);
 
-  const [history] = useState([
-    { date: '01/02/25 10:00:00am', service: 'Check up', pet: 'Jacob' },
-    { date: '01/02/25 18:52:00pm', service: 'Anti-Rabies Shots', pet: 'Jacob' },
-  ]);
+  useEffect(() => {
+    getAppointments().then((res) => setHistory(res.data));
+  }, []);
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
-  const handleOpen = () => {
-    alert("This feature is coming soon!");
+  const handleUpdate = (id, oldData) => {
+    const newDate = prompt('Enter new date (YYYY-MM-DD):', oldData.date);
+    if (newDate) {
+      updateAppointment(id, { ...oldData, date: newDate }).then(() => {
+        alert('Appointment updated');
+        getAppointments().then((res) => setHistory(res.data));
+      });
+    }
   };
 
-  const goToAppointment = () => {
-    navigate('/appointment');
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to cancel this appointment?')) {
+      deleteAppointment(id).then(() => {
+        alert('Appointment cancelled');
+        setHistory((prev) => prev.filter((item) => item.id !== id));
+      });
+    }
   };
 
-  const goToHome = () => {
-    navigate('/');
-  };
-
-  const goToLogin = () => {
-    navigate('/login');
-  };
-
-  const goToShop = () => {
-    navigate('/shop');
-  };
+  const goTo = (path) => navigate(path);
 
   return (
     <>
       <header className="header">
         <nav className="nav">
           <ul className="nav-links">
-            <Button onClick={goToShop} variant="text" color="inherit">
-                Products
-              </Button>
+            <Button onClick={() => goTo('/shop')} variant="text" color="inherit">
+              Products
+            </Button>
             {['Services', 'About', 'Contact'].map((label) => (
               <li key={label}>
-                <Button onClick={handleOpen} variant="text" color="inherit">
+                <Button onClick={() => alert('Coming soon!')} variant="text" color="inherit">
                   {label}
                 </Button>
               </li>
             ))}
             <li>
-              <Button onClick={goToAppointment} variant="text" color="inherit">
+              <Button onClick={() => goTo('/appointment')} variant="text" color="inherit">
                 Book now
               </Button>
             </li>
-            
           </ul>
-          <div className="brand" onClick={goToHome} style={{ cursor: 'pointer' }}>
+          <div className="brand" onClick={() => goTo('/')} style={{ cursor: 'pointer' }}>
             <span className="brand-bold">Fetch</span>&<span className="brand-light">Fur</span>
           </div>
           <div className="nav-right">
             <input type="text" placeholder="Search" />
-            <Button onClick={goToLogin} variant="outlined">Sign in</Button>
+            <Button onClick={() => goTo('/login')} variant="outlined">Sign in</Button>
             <div className="profile-icon" />
           </div>
         </nav>
@@ -157,14 +160,33 @@ const Profile = () => {
             </TextField>
 
             <div className="history-box">
-              <h4>History</h4>
-              {history.map((log, i) => (
-                <div key={i} className="history-entry">
-                  <div>{log.date}</div>
-                  <div>{log.service}</div>
-                  <div>{log.pet}</div>
-                </div>
-              ))}
+              <h4>Appointment History</h4>
+              {history.length === 0 ? (
+                <p>No appointments found.</p>
+              ) : (
+                history.map((log, i) => (
+                  <div key={i} className="history-entry">
+                    <div><strong>{log.petName}</strong> - {log.serviceType}</div>
+                    <div>{log.date} at {log.time}</div>
+                    <div>Status: {log.status}</div>
+                    <Button
+                      size="small"
+                      onClick={() => handleUpdate(log.id, log)}
+                      variant="outlined"
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      size="small"
+                      color="error"
+                      onClick={() => handleDelete(log.id)}
+                      variant="outlined"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

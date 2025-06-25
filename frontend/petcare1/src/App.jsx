@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Shop from './pages/Shop'; 
+import AppointmentList from './pages/AppointmentList';
 //import AboutUs from './pages/AboutUs'; 
 
 function Home() {
@@ -140,7 +141,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />
-        {/*<Route path="/shop" element={<Shop />} />*/} 
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/appointments-list" element={<AppointmentList />} />
       </Routes>
     </Router>
   );

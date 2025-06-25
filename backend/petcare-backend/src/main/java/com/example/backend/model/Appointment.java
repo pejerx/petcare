@@ -1,22 +1,35 @@
 package com.example.backend.model;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 @Entity
-@Table(name = "appointments")
+@Table(name = "tblAppointments")
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
 
+    
     private String petName;
+    
     private LocalDate date;
+    
     private LocalTime time;
+    
     private String serviceType;
+    
     private String status;
+   
     private String notes;
 
 
