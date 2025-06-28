@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './Profile.css';
 import { TextField, Button, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
+
 import {
   getAppointments,
   updateAppointment,
@@ -53,35 +55,7 @@ const Profile = () => {
 
   return (
     <>
-      <header className="header">
-        <nav className="nav">
-          <ul className="nav-links">
-            <Button onClick={() => goTo('/shop')} variant="text" color="inherit">
-              Products
-            </Button>
-            {['Services', 'About', 'Contact'].map((label) => (
-              <li key={label}>
-                <Button onClick={() => alert('Coming soon!')} variant="text" color="inherit">
-                  {label}
-                </Button>
-              </li>
-            ))}
-            <li>
-              <Button onClick={() => goTo('/appointment')} variant="text" color="inherit">
-                Book now
-              </Button>
-            </li>
-          </ul>
-          <div className="brand" onClick={() => goTo('/')} style={{ cursor: 'pointer' }}>
-            <span className="brand-bold">Fetch</span>&<span className="brand-light">Fur</span>
-          </div>
-          <div className="nav-right">
-            <input type="text" placeholder="Search" />
-            <Button onClick={() => goTo('/login')} variant="outlined">Sign in</Button>
-            <div className="profile-icon" />
-          </div>
-        </nav>
-      </header>
+     <Header/>
 
       <div className="profile-container">
         <div className="profile-header">

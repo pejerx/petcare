@@ -2,11 +2,15 @@ import React from 'react';
 import './SignUp.css';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
 
 const SignUp = () => {
   const navigate = useNavigate();
 
   return (
+    
+    <>
+    <Header />
     <div className="login-container">
       <div className="login-left">
         <h2 className="brand"><strong>Fetch</strong><span>&</span><span className="light">Fur</span></h2>
@@ -38,6 +42,7 @@ const SignUp = () => {
         <img src="/Pictures/1.png" alt="Dogs" />
       </div>
     </div>
+    </>
   );
 };
 

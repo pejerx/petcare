@@ -17,8 +17,8 @@ import com.example.backend.model.Appointment;
 import com.example.backend.service.AppointmentService;
 
 @RestController
-@RequestMapping("/api/appointments") // ✅ Changed from singular to plural
-@CrossOrigin(origins = "http://localhost:5173") // ✅ More secure for development
+@RequestMapping("/api/appointments")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AppointmentController {
 
     private final AppointmentService service;

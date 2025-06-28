@@ -1,6 +1,7 @@
 // Shop.jsx
 import React, { useState } from 'react';
 import './Shop.css';
+import Header from '../components/Header';
 import {
   Button,
   Grid,
@@ -62,25 +63,7 @@ const Shop = () => {
 
   return (
     <div className="shop-wrapper">
-      {/* Header */}
-      <header className="header">
-        <nav className="nav">
-          <ul className="nav-links">
-            <li><Button onClick={() => alert('Coming soon')} variant="text">Services</Button></li>
-            <li><Button onClick={() => goTo('/')} variant="text">About</Button></li>
-            <li><Button onClick={() => goTo('/')} variant="text">Contact</Button></li>
-            <li><Button onClick={() => goTo('/appointment')} variant="text">Book now</Button></li>
-          </ul>
-          <div className="brand" onClick={() => goTo('/')} style={{ cursor: 'pointer' }}>
-            <span className="brand-bold">Fetch</span>&<span className="brand-light">Fur</span>
-          </div>
-          <div className="nav-right">
-            <input type="text" placeholder="Search" />
-            <Button onClick={() => goTo('/login')} variant="outlined">Sign in</Button>
-            <div className="profile-icon" onClick={() => goTo('/profile')} style={{ cursor: 'pointer' }} />
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       {/* Hero Slider */}
       <Box className="carousel-section" sx={{ mt: 4 }}>

@@ -13,6 +13,7 @@ import {
 import './Appointment.css';
 import { useNavigate } from 'react-router-dom';
 import { createAppointment } from "../api/appointment"; 
+import Header from '../components/Header';
 
 const Appointment = () => {
   const navigate = useNavigate();
@@ -34,8 +35,8 @@ const Appointment = () => {
     try {
       await createAppointment({
         ...formData,
-        date: formData.date, // YYYY-MM-DD
-        time: formData.time, // HH:mm
+        date: formData.date, 
+        time: formData.time,
       });
       alert('Appointment created successfully!');
       navigate('/profile');
@@ -47,37 +48,7 @@ const Appointment = () => {
 
   return (
     <>
-      <header className="header">
-        <nav className="nav">
-          <ul className="nav-links">
-            <Button onClick={() => navigate('/shop')} variant="text" color="inherit">
-              Products
-            </Button>
-            {['Services', 'About', 'Contact'].map((label) => (
-              <li key={label}>
-                <Button 
-                  onClick={label === 'Contact' ? () => alert("📞 1234-456-7890 | 📱 123-456-7890") : () => alert('This feature is coming soon!')} 
-                  variant="text" color="inherit">
-                  {label}
-                </Button>
-              </li>
-            ))}
-            <li>
-              <Button onClick={() => navigate('/appointment')} variant="text" color="inherit">
-                Book now
-              </Button>
-            </li>
-          </ul>
-          <div className="brand" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            <span className="brand-bold">Fetch</span>&<span className="brand-light">Fur</span>
-          </div>
-          <div className="nav-right">
-            <input type="text" placeholder="Search" />
-            <Button onClick={() => navigate('/login')} variant="outlined">Sign in</Button>
-            <div className="profile-icon" />
-          </div>
-        </nav>
-      </header>
+      <Header/>
 
       <Box className="appointment-wrapper">
         <Paper elevation={4} className="appointment-container">
@@ -93,11 +64,12 @@ const Appointment = () => {
               <Grid item xs={12} md={6}>
                 <InputLabel className="input-label">Pet Name</InputLabel>
                 <TextField
-                  fullWidth
-                  value={formData.petName}
-                  onChange={(e) => setFormData({ ...formData, petName: e.target.value })}
-                  placeholder="e.g. Max"
-                />
+                  className="textfield-long"
+                   fullWidth
+                   value={formData.petName}
+                   onChange={(e) => setFormData({ ...formData, petName: e.target.value })}
+                   placeholder="e.g. Max"
+                   />
 
                 <Box mt={3}>
                   <InputLabel className="input-label">For when</InputLabel>

@@ -1,6 +1,6 @@
 .tall-select .MuiSelect-select {
-  min-height: 7px !important;
-    min-width: 350px;
+  min-height: 100px !important;
+  min-width: 3x;
   display: flex;
   align-items: center;
 }
@@ -47,3 +47,6 @@
   justify-content: flex-end;
   gap: 12px;
 }
+
+
+

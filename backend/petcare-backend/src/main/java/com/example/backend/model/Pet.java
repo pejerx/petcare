@@ -1,6 +1,10 @@
 package com.example.backend.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tblPets")
@@ -20,6 +24,10 @@ public class Pet {
         this.type = type;
         this.weight = weight;
         this.breed = breed;
+    }
+
+    public void setPetId(Long petId) {
+        this.petId = petId;
     }
 
     public Long getPetId() {
@@ -61,10 +69,7 @@ public class Pet {
 
     public Pet(){}
 
-    public void setId(Long petId2) {
-         
-        throw new UnsupportedOperationException("Unimplemented method 'setId'");
-    }
+    
 
 
 

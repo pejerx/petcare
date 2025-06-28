@@ -1,11 +1,12 @@
 package com.example.backend.service;
 
-import com.example.backend.model.Pet;
-import com.example.backend.repository.PetRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.example.backend.model.Pet;
+import com.example.backend.repository.PetRepository;
 
 @Service
 public class PetService {
@@ -29,7 +30,7 @@ public class PetService {
     }
 
     public Pet update(Long petId, Pet newData) {
-        newData.setId(petId);
+        newData.setPetId(petId);
         return repository.save(newData);
     }
 

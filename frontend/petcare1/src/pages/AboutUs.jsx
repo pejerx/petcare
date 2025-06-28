@@ -29,35 +29,8 @@ const Appointment = () => {
   };
 
     return(<div className="app">
-      <header className="header">
-        <nav className="nav">
-          <ul className="nav-links">
-            {['Services', 'About', 'Contact'].map((label) => (
-              <li key={label}>
-                <Button onClick={handleOpen} variant="text" color="inherit">
-                  {label}
-                </Button>
-              </li>
-            ))}
-            <li>
-              <Button onClick={goToShop} variant="text" color="inherit">Products</Button> 
-            </li>
-            <li>
-              <Button onClick={goToAppointment} variant="text" color="inherit">
-                Book now
-              </Button>
-            </li>
-          </ul>
-          <div className="brand">
-            <span className="brand-bold">Fetch</span>&<span className="brand-light">Fur</span>
-          </div>
-          <div className="nav-right">
-            <input type="text" placeholder="Search" />
-            <Button onClick={goToLogin} variant="outlined">Sign in</Button>
-            <div className="profile-icon" onClick={() => navigate('/profile')} style={{ cursor: 'pointer' }} />
-          </div>
-        </nav>
-      </header>
+      
+      <Header />
 
       <section className="hero">
         <div className="hero-content">
