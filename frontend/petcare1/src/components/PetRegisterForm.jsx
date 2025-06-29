@@ -20,9 +20,9 @@ const PetRegister = () => {
 
   const [formData, setFormData] = useState({
     petName: '',
-    date: '',
-    time: '',
-    serviceType: '',
+    type: '',
+    weight: '',
+    breed: '',
     status: 'Pending',
     notes: '',
   });
@@ -72,41 +72,37 @@ const PetRegister = () => {
                    />
 
                 <Box mt={3}>
-                  <InputLabel className="input-label">For when</InputLabel>
-                  <TextField
-                    type="date"
+                  <InputLabel className="input-label">Type of Animal</InputLabel>
+                  <Select
                     fullWidth
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  />
+                    value={formData.type}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                  >
+                    <MenuItem value="Dog">Dog</MenuItem>
+                    <MenuItem value="Cat">Cat</MenuItem>
+                    <MenuItem value="Bird">Bird</MenuItem>
+                  </Select>
                 </Box>
 
                 <Box mt={3}>
-                  <InputLabel className="input-label">Service</InputLabel>
-                  <Select
-                    fullWidth
-                    value={formData.serviceType}
-                    onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-                  >
-                    <MenuItem value="Grooming">Grooming</MenuItem>
-                    <MenuItem value="Vaccination">Vaccination</MenuItem>
-                    <MenuItem value="Check-up">Check-up</MenuItem>
-                  </Select>
+                  <InputLabel className="input-label">Weight</InputLabel>
+                  <TextField
+                  className="textfield-long"
+                   fullWidth
+                   value={formData.petName}
+                   onChange={(e) => setFormData({ ...formData, petName: e.target.value })}
+                   placeholder="e.g. Max"
+                   />
                 </Box>
               </Grid>
 
               <Grid item xs={12} md={6}>
-                <InputLabel className="input-label">Time</InputLabel>
-                <Select
+                <InputLabel className="input-label">Breed</InputLabel>
+                <TextField
                   fullWidth
-                  value={formData.time}
-                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                >
-                  <MenuItem value="10:00">10AM - 12PM</MenuItem>
-                  <MenuItem value="13:00">1PM - 2PM</MenuItem>
-                  <MenuItem value="14:00">2PM - 4PM</MenuItem>
-                  <MenuItem value="16:00">4PM - 6PM</MenuItem>
-                </Select>
+                  value={formData.breed}
+                  onChange={(e) => setFormData({ ...formData, breed: e.target.value })}
+                />
 
                 <Box mt={3}>
                   <InputLabel className="input-label">Notes</InputLabel>
