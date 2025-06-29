@@ -21,6 +21,7 @@ import AppointmentList from './pages/AppointmentList';
 
 import Header from './components/Header';
 import AppointmentForm from './components/AppointmentForm'; // ✅ NEW
+import logo from '/src/assets/fetch_and_fur_logo1.png';
 
 function Home({ setAppointmentOpen }) {
   const navigate = useNavigate();
@@ -248,8 +249,8 @@ function Home({ setAppointmentOpen }) {
         </section>
 
         {/* FOOTER */}
-        <footer className="footer" style={{ background: '#FF6F00', color: 'white', padding: '2rem', textAlign: 'center' }}>
-          <h2><span className="brand-bold">Fetch</span>&<span className="brand-light">Fur</span></h2>
+        <footer className="footer" style={{ background: '#d47636', color: 'white', padding: '2rem', textAlign: 'center' }}>
+          <img src={logo} width={250} height={60} alt="Logo"/>
           <p>by FazCo</p>
           <p>Nuable St. Bonafide, Kal City, 4000 Cebu</p>
           <p>📞 1234-456-7890 | 📱 123-456-7890</p>

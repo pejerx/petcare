@@ -20,6 +20,7 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 import AppointmentForm from '../components/AppointmentForm'; // Ensure this path matches your file structure
+import logo from '/src/assets/fetch_and_fur_logo1.png';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -140,7 +141,7 @@ const Header = () => {
 
           {/* LOGO */}
           <div className="brand" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            <span className="brand-bold">Fetch</span>&<span className="brand-light">Fur</span>
+            <img src={logo} width={200} height={50} alt="Logo"/>
           </div>
 
           {/* RIGHT NAV */}

@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
+import logo from '/src/assets/fetch_and_fur_logo1.png';
 
 const categories = [
   'Antibiotics', 'Vitamins & Supplements', 'Flea & Worm Treatment',
@@ -142,7 +143,7 @@ const Shop = () => {
       {/* Footer */}
       <footer className="footer">
         <div className="footer-brand">
-          <h2><span className="brand-bold">Fetch</span>&<span className="brand-light">Fur</span></h2>
+          <img src={logo} width={250} height={60} alt="Logo"/>
           <p>by FazCo</p>
         </div>
         <div className="footer-info">

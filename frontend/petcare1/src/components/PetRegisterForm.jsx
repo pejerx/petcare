@@ -13,7 +13,7 @@ import {
 import './Appointment.css';
 import { useNavigate } from 'react-router-dom';
 import { createPet } from "../api/pet"; 
-import Header from '../components/Header';
+import Header from './Header';
 
 const PetRegister = () => {
   const navigate = useNavigate();
