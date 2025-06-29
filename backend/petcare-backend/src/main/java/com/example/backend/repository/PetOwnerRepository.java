@@ -1,19 +1,13 @@
 package com.example.backend.repository;
 
-import com.example.backend.model.PetOwner;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 
-@Repository
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.backend.model.PetOwner;
+
 public interface PetOwnerRepository extends JpaRepository<PetOwner, Long> {
-    
-    Optional<PetOwner> findByEmail(String email);
-    
-    Optional<PetOwner> findByPhoneNumber(String phoneNumber);
-    
     boolean existsByEmail(String email);
-    
-    boolean existsByPhoneNumber(int phoneNumber);
-} 
+    boolean existsByPhoneNumber(String phoneNumber);
+    Optional<PetOwner> findByEmail(String email);
+}

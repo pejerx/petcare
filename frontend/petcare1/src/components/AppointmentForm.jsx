@@ -1,5 +1,5 @@
 // src/components/AppointmentForm.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -9,11 +9,10 @@ import {
   Select,
   TextField,
   Typography,
-  Paper,
+  Paper
 } from '@mui/material';
 import { createAppointment } from '../api/appointment';
 import './AppointmentForm.css';
-
 
 const AppointmentForm = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -22,8 +21,17 @@ const AppointmentForm = ({ onClose, onSuccess }) => {
     time: '',
     serviceType: '',
     status: 'Pending',
-    notes: '',
+    notes: ''
   });
+
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // default true to avoid flicker
+
+  useEffect(() => {
+    const user = localStorage.getItem('petOwner');
+    if (!user) {
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -33,7 +41,7 @@ const AppointmentForm = ({ onClose, onSuccess }) => {
         time: formData.time,
       });
       alert('Appointment created successfully!');
-      if (onSuccess) onSuccess(); // callback
+      if (onSuccess) onSuccess();
     } catch (err) {
       console.error(err);
       alert('Failed to submit appointment.');
@@ -43,79 +51,95 @@ const AppointmentForm = ({ onClose, onSuccess }) => {
   return (
     <Paper elevation={4} className="appointment-container">
       <Box className="appointment-header">
-        <Typography variant="h6">Add Appointment</Typography>
+        <Typography variant="h6">
+          {isAuthenticated ? 'Add Appointment' : 'Access Denied'}
+        </Typography>
         <Button sx={{ color: 'white' }} onClick={onClose}>
           Close ✕
         </Button>
       </Box>
 
-      <Box className="appointment-body">
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            <InputLabel className="input-label">Pet Name</InputLabel>
-            <TextField
-              fullWidth
-              value={formData.petName}
-              onChange={(e) => setFormData({ ...formData, petName: e.target.value })}
-              placeholder="e.g. Max"
-            />
-
-            <Box mt={3}>
-              <InputLabel className="input-label">For when</InputLabel>
+      {!isAuthenticated ? (
+        <Box className="appointment-body" sx={{ textAlign: 'center', padding: '2rem' }}>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            You need to <strong>Sign Up or Log In</strong> to book an appointment.
+          </Typography>
+          <Button variant="contained" onClick={() => {
+            onClose();
+            window.location.href = '/signup';
+          }}>
+            Go to Sign Up
+          </Button>
+        </Box>
+      ) : (
+        <Box className="appointment-body">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <InputLabel className="input-label">Pet Name</InputLabel>
               <TextField
-                type="date"
                 fullWidth
-                value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                value={formData.petName}
+                onChange={(e) => setFormData({ ...formData, petName: e.target.value })}
+                placeholder="e.g. Max"
               />
-            </Box>
 
-            <Box mt={3}>
-              <InputLabel className="input-label">Service</InputLabel>
+              <Box mt={3}>
+                <InputLabel className="input-label">For when</InputLabel>
+                <TextField
+                  type="date"
+                  fullWidth
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                />
+              </Box>
+
+              <Box mt={3}>
+                <InputLabel className="input-label">Service</InputLabel>
+                <Select
+                  fullWidth
+                  value={formData.serviceType}
+                  onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
+                >
+                  <MenuItem value="Grooming">Grooming</MenuItem>
+                  <MenuItem value="Vaccination">Vaccination</MenuItem>
+                  <MenuItem value="Check-up">Check-up</MenuItem>
+                </Select>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <InputLabel className="input-label">Time</InputLabel>
               <Select
                 fullWidth
-                value={formData.serviceType}
-                onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
+                value={formData.time}
+                onChange={(e) => setFormData({ ...formData, time: e.target.value })}
               >
-                <MenuItem value="Grooming">Grooming</MenuItem>
-                <MenuItem value="Vaccination">Vaccination</MenuItem>
-                <MenuItem value="Check-up">Check-up</MenuItem>
+                <MenuItem value="10:00">10AM - 12PM</MenuItem>
+                <MenuItem value="13:00">1PM - 2PM</MenuItem>
+                <MenuItem value="14:00">2PM - 4PM</MenuItem>
+                <MenuItem value="16:00">4PM - 6PM</MenuItem>
               </Select>
-            </Box>
+
+              <Box mt={3}>
+                <InputLabel className="input-label">Notes</InputLabel>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={3}
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  placeholder="Any special instructions?"
+                />
+              </Box>
+            </Grid>
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <InputLabel className="input-label">Time</InputLabel>
-            <Select
-              fullWidth
-              value={formData.time}
-              onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-            >
-              <MenuItem value="10:00">10AM - 12PM</MenuItem>
-              <MenuItem value="13:00">1PM - 2PM</MenuItem>
-              <MenuItem value="14:00">2PM - 4PM</MenuItem>
-              <MenuItem value="16:00">4PM - 6PM</MenuItem>
-            </Select>
-
-            <Box mt={3}>
-              <InputLabel className="input-label">Notes</InputLabel>
-              <TextField
-                fullWidth
-                multiline
-                rows={3}
-                value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                placeholder="Any special instructions?"
-              />
-            </Box>
-          </Grid>
-        </Grid>
-
-        <Box className="appointment-footer">
-          <Button variant="outlined" color="inherit" onClick={onClose}>Cancel</Button>
-          <Button variant="contained" color="success" onClick={handleSubmit}>Confirm</Button>
+          <Box className="appointment-footer">
+            <Button variant="outlined" color="inherit" onClick={onClose}>Cancel</Button>
+            <Button variant="contained" color="success" onClick={handleSubmit}>Confirm</Button>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Paper>
   );
 };

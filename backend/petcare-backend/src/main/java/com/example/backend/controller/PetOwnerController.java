@@ -1,14 +1,25 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.PetOwner;
-import com.example.backend.service.PetOwnerService;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.backend.dto.LoginRequest;
+import com.example.backend.model.PetOwner;
+import com.example.backend.repository.PetOwnerRepository;
+import com.example.backend.service.PetOwnerService;
 
 @RestController
 @RequestMapping("/api/petowners")
@@ -18,23 +29,25 @@ public class PetOwnerController {
     @Autowired
     private PetOwnerService petOwnerService;
 
+    @Autowired
+    private PetOwnerRepository petOwnerRepository;
+
     @GetMapping
     public ResponseEntity<List<PetOwner>> getAllPetOwners() {
-        List<PetOwner> petOwners = petOwnerService.getAllPetOwners();
-        return ResponseEntity.ok(petOwners);
+        return ResponseEntity.ok(petOwnerService.getAllPetOwners());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PetOwner> getPetOwnerById(@PathVariable Long id) {
-        Optional<PetOwner> petOwner = petOwnerService.getPetOwnerById(id);
-        return petOwner.map(ResponseEntity::ok)
+        return petOwnerService.getPetOwnerById(id)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/email/{email}")
     public ResponseEntity<PetOwner> getPetOwnerByEmail(@PathVariable String email) {
-        Optional<PetOwner> petOwner = petOwnerService.getPetOwnerByEmail(email);
-        return petOwner.map(ResponseEntity::ok)
+        return petOwnerService.getPetOwnerByEmail(email)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -70,13 +83,20 @@ public class PetOwnerController {
 
     @GetMapping("/check-email/{email}")
     public ResponseEntity<Boolean> checkEmailExists(@PathVariable String email) {
-        boolean exists = petOwnerService.existsByEmail(email);
-        return ResponseEntity.ok(exists);
+        return ResponseEntity.ok(petOwnerService.existsByEmail(email));
     }
 
     @GetMapping("/check-phone/{phoneNumber}")
     public ResponseEntity<Boolean> checkPhoneExists(@PathVariable String phoneNumber) {
-        boolean exists = petOwnerService.existsByPhoneNumber(phoneNumber);
-        return ResponseEntity.ok(exists);
+        return ResponseEntity.ok(petOwnerService.existsByPhoneNumber(phoneNumber));
     }
-} 
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        Optional<PetOwner> owner = petOwnerRepository.findByEmail(request.getEmail());
+        if (owner.isPresent() && request.getPassword().equals(owner.get().getPassword())) {
+            return ResponseEntity.ok(owner.get());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+    }
+}

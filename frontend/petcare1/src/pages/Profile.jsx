@@ -3,59 +3,99 @@ import './Profile.css';
 import { TextField, Button, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
-
-import {
-  getAppointments,
-  updateAppointment,
-  deleteAppointment,
-} from '../api/appointment';
+import axios from 'axios';
 
 const Profile = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  const [petOwnerId, setPetOwnerId] = useState(null);
   const [profile, setProfile] = useState({
-    fullName: 'Jane Doe',
-    nickName: 'Nene',
-    email: 'janedoe01@gmail.com',
-    gender: 'Female',
-    country: 'Philippines',
+    firstname: '',
+    lastname: '',
+    email: '',
+    phonenumber: '',
+    address: '',
   });
 
-  const [pets] = useState([{ name: 'Jacob', breed: 'Golden Retriever' }]);
+  const [pets, setPets] = useState([{ name: 'Jacob', breed: 'Golden Retriever' }]); // Placeholder
   const [history, setHistory] = useState([]);
 
+  const storedUser = JSON.parse(localStorage.getItem('petOwner'));
+  const email = storedUser?.email;
+
   useEffect(() => {
-    getAppointments().then((res) => setHistory(res.data));
+    if (!email) {
+      alert('You must be logged in to view this page.');
+      navigate('/login');
+      return;
+    }
+
+    axios.get(`http://localhost:8080/api/petowners/email/${email}`)
+      .then((res) => {
+        const data = res.data;
+        setProfile({
+          firstname: data.firstname,
+          lastname: data.lastname,
+          email: data.email,
+          phonenumber: data.phonenumber,
+          address: data.address,
+        });
+        setPetOwnerId(data.id);
+      })
+      .catch(() => {
+        alert('PetOwner not found!');
+      });
+
+    axios.get('http://localhost:8080/api/appointments')
+      .then((res) => {
+        setHistory(res.data);
+      });
   }, []);
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
+  const handleSave = () => {
+    axios.put(`http://localhost:8080/api/petowners/${petOwnerId}`, profile)
+      .then(() => {
+        alert('Profile updated!');
+        setIsEditing(false);
+      })
+      .catch(() => alert('Failed to update profile'));
+  };
+
   const handleUpdate = (id, oldData) => {
     const newDate = prompt('Enter new date (YYYY-MM-DD):', oldData.date);
     if (newDate) {
-      updateAppointment(id, { ...oldData, date: newDate }).then(() => {
-        alert('Appointment updated');
-        getAppointments().then((res) => setHistory(res.data));
-      });
+      axios.put(`http://localhost:8080/api/appointments/${id}`, { ...oldData, date: newDate })
+        .then(() => {
+          alert('Appointment updated');
+          axios.get('http://localhost:8080/api/appointments')
+            .then((res) => setHistory(res.data));
+        });
     }
   };
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to cancel this appointment?')) {
-      deleteAppointment(id).then(() => {
-        alert('Appointment cancelled');
-        setHistory((prev) => prev.filter((item) => item.id !== id));
-      });
+      axios.delete(`http://localhost:8080/api/appointments/${id}`)
+        .then(() => {
+          alert('Appointment cancelled');
+          setHistory((prev) => prev.filter((item) => item.id !== id));
+        });
     }
   };
 
-  const goTo = (path) => navigate(path);
+  const handleLogout = () => {
+    localStorage.removeItem('petOwner');
+    alert('You have been logged out.');
+    navigate('/login');
+  };
 
   return (
     <>
-     <Header/>
+      <Header />
 
       <div className="profile-container">
         <div className="profile-header">
@@ -63,11 +103,14 @@ const Profile = () => {
             <img src="/Pictures/1.png" alt="avatar" />
           </div>
           <div>
-            <h3>{profile.fullName}</h3>
+            <h3>{profile.firstname} {profile.lastname}</h3>
             <p>{profile.email}</p>
           </div>
           <div style={{ marginLeft: 'auto' }}>
-            <Button variant="contained" onClick={() => setIsEditing(!isEditing)}>
+            <Button variant="contained" onClick={() => {
+              if (isEditing) handleSave();
+              else setIsEditing(true);
+            }}>
               {isEditing ? 'Save' : 'Edit'}
             </Button>
           </div>
@@ -77,26 +120,31 @@ const Profile = () => {
           <div className="left-fields">
             <TextField
               fullWidth
-              label="Full Name"
-              name="fullName"
-              value={profile.fullName}
+              label="First Name"
+              name="firstname"
+              value={profile.firstname}
               onChange={handleChange}
               disabled={!isEditing}
               margin="normal"
             />
             <TextField
-              select
               fullWidth
-              label="Gender"
-              name="gender"
-              value={profile.gender}
+              label="Last Name"
+              name="lastname"
+              value={profile.lastname}
               onChange={handleChange}
               disabled={!isEditing}
               margin="normal"
-            >
-              <MenuItem value="Female">Female</MenuItem>
-              <MenuItem value="Male">Male</MenuItem>
-            </TextField>
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              name="phonenumber"
+              value={profile.phonenumber}
+              onChange={handleChange}
+              disabled={!isEditing}
+              margin="normal"
+            />
 
             <div className="pets-box">
               <h4>My Pets</h4>
@@ -112,26 +160,22 @@ const Profile = () => {
           <div className="right-fields">
             <TextField
               fullWidth
-              label="Nick Name"
-              name="nickName"
-              value={profile.nickName}
+              label="Address"
+              name="address"
+              value={profile.address}
               onChange={handleChange}
               disabled={!isEditing}
               margin="normal"
             />
             <TextField
-              select
               fullWidth
-              label="Country"
-              name="country"
-              value={profile.country}
+              label="Email"
+              name="email"
+              value={profile.email}
               onChange={handleChange}
-              disabled={!isEditing}
+              disabled={true}
               margin="normal"
-            >
-              <MenuItem value="Philippines">Philippines</MenuItem>
-              <MenuItem value="USA">USA</MenuItem>
-            </TextField>
+            />
 
             <div className="history-box">
               <h4>Appointment History</h4>
@@ -143,24 +187,36 @@ const Profile = () => {
                     <div><strong>{log.petName}</strong> - {log.serviceType}</div>
                     <div>{log.date} at {log.time}</div>
                     <div>Status: {log.status}</div>
-                    <Button
-                      size="small"
-                      onClick={() => handleUpdate(log.id, log)}
-                      variant="outlined"
-                    >
+                    <Button size="small" onClick={() => handleUpdate(log.id, log)} variant="outlined">
                       Edit
                     </Button>
-                    <Button
-                      size="small"
-                      color="error"
-                      onClick={() => handleDelete(log.id)}
-                      variant="outlined"
-                    >
+                    <Button size="small" color="error" onClick={() => handleDelete(log.id)} variant="outlined">
                       Cancel
                     </Button>
                   </div>
                 ))
               )}
+            </div>
+
+            {/* Log Out Button */}
+            <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{
+                  padding: '0.6rem 2rem',
+                  fontWeight: 'bold',
+                  fontSize: '1rem',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                  '&:hover': {
+                    backgroundColor: '#c62828',
+                  },
+                }}
+                onClick={handleLogout}
+              >
+                🚪 Log Out
+              </Button>
             </div>
           </div>
         </div>

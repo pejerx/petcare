@@ -1,12 +1,13 @@
 package com.example.backend.service;
 
-import com.example.backend.model.PetOwner;
-import com.example.backend.repository.PetOwnerRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.backend.model.PetOwner;
+import com.example.backend.repository.PetOwnerRepository;
 
 @Service
 public class PetOwnerService {
@@ -27,16 +28,14 @@ public class PetOwnerService {
     }
 
     public PetOwner createPetOwner(PetOwner petOwner) {
-        // Check if email already exists
         if (petOwnerRepository.existsByEmail(petOwner.getEmail())) {
             throw new RuntimeException("Email already exists: " + petOwner.getEmail());
         }
-        
-        // Check if phone number already exists
-        if (petOwnerRepository.existsByPhoneNumber(petOwner.getPhoneNumber())) {
-            throw new RuntimeException("Phone number already exists: " + petOwner.getPhoneNumber());
+
+        if (petOwnerRepository.existsByPhoneNumber(petOwner.getPhonenumber())) {
+            throw new RuntimeException("Phone number already exists: " + petOwner.getPhonenumber());
         }
-        
+
         return petOwnerRepository.save(petOwner);
     }
 
@@ -44,25 +43,23 @@ public class PetOwnerService {
         PetOwner petOwner = petOwnerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("PetOwner not found with id: " + id));
 
-        // Check if email is being changed and if it already exists
-        if (!petOwner.getEmail().equals(petOwnerDetails.getEmail()) && 
-            petOwnerRepository.existsByEmail(petOwnerDetails.getEmail())) {
+        if (!petOwner.getEmail().equals(petOwnerDetails.getEmail()) &&
+                petOwnerRepository.existsByEmail(petOwnerDetails.getEmail())) {
             throw new RuntimeException("Email already exists: " + petOwnerDetails.getEmail());
         }
 
-        // Check if phone number is being changed and if it already exists
-        if (!petOwner.getPhoneNumber().equals(petOwnerDetails.getPhoneNumber()) && 
-            petOwnerRepository.existsByPhoneNumber(petOwnerDetails.getPhoneNumber())) {
-            throw new RuntimeException("Phone number already exists: " + petOwnerDetails.getPhoneNumber());
+        if (!petOwner.getPhonenumber().equals(petOwnerDetails.getPhonenumber()) &&
+                petOwnerRepository.existsByPhoneNumber(petOwnerDetails.getPhonenumber())) {
+            throw new RuntimeException("Phone number already exists: " + petOwnerDetails.getPhonenumber());
         }
 
-        petOwner.setFirstName(petOwnerDetails.getFirstName());
-        petOwner.setLastName(petOwnerDetails.getLastName());
+        petOwner.setFirstname(petOwnerDetails.getFirstname());
+        petOwner.setLastname(petOwnerDetails.getLastname());
         petOwner.setEmail(petOwnerDetails.getEmail());
-        petOwner.setPhoneNumber(petOwnerDetails.getPhoneNumber());
+        petOwner.setPhonenumber(petOwnerDetails.getPhonenumber());
         petOwner.setAddress(petOwnerDetails.getAddress());
+        petOwner.setPassword(petOwnerDetails.getPassword());
 
-        
         return petOwnerRepository.save(petOwner);
     }
 
@@ -79,4 +76,4 @@ public class PetOwnerService {
     public boolean existsByPhoneNumber(String phoneNumber) {
         return petOwnerRepository.existsByPhoneNumber(phoneNumber);
     }
-} 
+}
