@@ -4,6 +4,7 @@ import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import axios from 'axios';
+import logo from '/src/assets/fetch_and_fur_logo1.png';
 
 const Login = () => {
   const navigate = useNavigate();

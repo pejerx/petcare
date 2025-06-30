@@ -4,6 +4,7 @@ import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import axios from 'axios';
+import logo from '/src/assets/fetch_and_fur_logo1.png';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -80,9 +81,7 @@ const SignUp = () => {
       <Header />
       <div className="login-container">
         <div className="login-left">
-          <h2 className="brand">
-            <img src={logo} width={150} height={40} alt="Logo"/>
-          </h2>
+          <img src={logo} width={150} height={40} alt="Logo"/>
           <h1>Sign Up</h1>
 
           <TextField
