@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 import { createAppointment } from '../api/appointment';
 import './AppointmentForm.css';
+import TreatmentList from './pages/TreatmentList';
+import { Link } from 'react-router-dom';
 
 const AppointmentForm = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
