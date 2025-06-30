@@ -87,11 +87,11 @@ const Profile = () => {
     }
   };
 
-  const handleLogout = () => {
+  /*const handleLogout = () => {
     localStorage.removeItem('petOwner');
     alert('You have been logged out.');
     navigate('/login');
-  };
+  };*/
 
   return (
     <>
@@ -198,26 +198,7 @@ const Profile = () => {
               )}
             </div>
 
-            {/* Log Out Button */}
-            <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-              <Button
-                variant="contained"
-                color="error"
-                sx={{
-                  padding: '0.6rem 2rem',
-                  fontWeight: 'bold',
-                  fontSize: '1rem',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                  '&:hover': {
-                    backgroundColor: '#c62828',
-                  },
-                }}
-                onClick={handleLogout}
-              >
-                🚪 Log Out
-              </Button>
-            </div>
+            
           </div>
         </div>
       </div>

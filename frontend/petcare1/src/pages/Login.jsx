@@ -37,8 +37,12 @@ const Login = () => {
         password: form.password,
       });
 
+      
       // Save user info in local storage
       localStorage.setItem('petOwner', JSON.stringify(res.data));
+
+      localStorage.setItem('user', JSON.stringify({ name: res.data.name || 'Pet Owner' }));
+      window.dispatchEvent(new Event('storageChange'));
 
       // Navigate to profile
       navigate('/profile');
