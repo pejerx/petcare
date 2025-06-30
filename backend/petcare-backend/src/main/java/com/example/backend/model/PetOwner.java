@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+//add foreign key for Pet and Appointment
 @Entity
 @Table(name = "tblPetOwner")
 public class PetOwner {
@@ -20,6 +21,8 @@ public class PetOwner {
     private String phoneNumber;
     private String address;
     private String password; // ✅ added
+    // private String petId;
+    // private String appointmentId;
 
     // --- Getters and Setters ---
 
