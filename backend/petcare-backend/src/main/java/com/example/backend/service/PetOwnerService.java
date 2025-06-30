@@ -32,8 +32,8 @@ public class PetOwnerService {
             throw new RuntimeException("Email already exists: " + petOwner.getEmail());
         }
 
-        if (petOwnerRepository.existsByPhoneNumber(petOwner.getPhonenumber())) {
-            throw new RuntimeException("Phone number already exists: " + petOwner.getPhonenumber());
+        if (petOwnerRepository.existsByPhoneNumber(petOwner.getPhoneNumber())) {
+            throw new RuntimeException("Phone number already exists: " + petOwner.getPhoneNumber());
         }
 
         return petOwnerRepository.save(petOwner);
@@ -48,15 +48,15 @@ public class PetOwnerService {
             throw new RuntimeException("Email already exists: " + petOwnerDetails.getEmail());
         }
 
-        if (!petOwner.getPhonenumber().equals(petOwnerDetails.getPhonenumber()) &&
-                petOwnerRepository.existsByPhoneNumber(petOwnerDetails.getPhonenumber())) {
-            throw new RuntimeException("Phone number already exists: " + petOwnerDetails.getPhonenumber());
+        if (!petOwner.getPhoneNumber().equals(petOwnerDetails.getPhoneNumber()) &&
+                petOwnerRepository.existsByPhoneNumber(petOwnerDetails.getPhoneNumber())) {
+            throw new RuntimeException("Phone number already exists: " + petOwnerDetails.getPhoneNumber());
         }
 
         petOwner.setFirstname(petOwnerDetails.getFirstname());
         petOwner.setLastname(petOwnerDetails.getLastname());
         petOwner.setEmail(petOwnerDetails.getEmail());
-        petOwner.setPhonenumber(petOwnerDetails.getPhonenumber());
+        petOwner.setPhoneNumber(petOwnerDetails.getPhoneNumber());
         petOwner.setAddress(petOwnerDetails.getAddress());
         petOwner.setPassword(petOwnerDetails.getPassword());
 

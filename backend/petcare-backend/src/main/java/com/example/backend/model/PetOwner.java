@@ -55,11 +55,11 @@ public class PetOwner {
         this.email = email;
     }
 
-    public String getPhonenumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhonenumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
