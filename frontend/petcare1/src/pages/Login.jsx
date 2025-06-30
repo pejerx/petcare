@@ -52,7 +52,7 @@ const Login = () => {
       <div className="login-container">
         <div className="login-left">
           <h2 className="brand">
-            <strong>Fetch</strong><span>&</span><span className="light">Fur</span>
+            <img src={logo} width={150} height={40} alt="Logo"/>
           </h2>
           <h1>Login</h1>
 

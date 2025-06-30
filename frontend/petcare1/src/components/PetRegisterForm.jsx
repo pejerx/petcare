@@ -81,6 +81,7 @@ const PetRegister = () => {
                     <MenuItem value="Dog">Dog</MenuItem>
                     <MenuItem value="Cat">Cat</MenuItem>
                     <MenuItem value="Bird">Bird</MenuItem>
+                    <MenuItem value="Reptile">Reptile</MenuItem>
                   </Select>
                 </Box>
 
