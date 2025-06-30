@@ -18,11 +18,13 @@ import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Shop from './pages/Shop';
 import AppointmentList from './pages/AppointmentList';
+import Veterinarian from './pages/Veterinarians';
 
 import Header from './components/Header';
 import AppointmentForm from './components/AppointmentForm';
 import PrivateRoute from './components/PrivateRoute';
 import Footer from './components/Footer';
+
 import logo from '/src/assets/fetch_and_fur_logo1.png';
 
 
@@ -272,6 +274,7 @@ function App() {
         <Route path="/" element={<Home setAppointmentOpen={setAppointmentOpen} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/veterinarians" element={<Veterinarian />} />
 
         <Route
           path="/profile"

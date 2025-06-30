@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 const API_BASE = 'http://localhost:8080/api/appointments';
@@ -16,6 +15,11 @@ export const getAppointments = () => {
 // READ: Get one appointment by ID
 export const getAppointmentById = (id) => {
   return axios.get(`${API_BASE}/${id}`);
+};
+
+// READ: Get appointments by owner ID ✅
+export const getAppointmentsByOwnerId = (ownerId) => {
+  return axios.get(`${API_BASE}/owner/${ownerId}`);
 };
 
 // UPDATE: Update an existing appointment by ID

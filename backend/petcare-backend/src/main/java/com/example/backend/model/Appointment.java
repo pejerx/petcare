@@ -3,11 +3,14 @@ package com.example.backend.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,23 +19,29 @@ public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
     private Long id;
 
-    
+    @ManyToOne
+    @JsonIgnoreProperties("appointments")
+    @JoinColumn(name = "owner_id")
+    private PetOwner owner;
+
     private String petName;
-    
     private LocalDate date;
-    
     private LocalTime time;
-    
     private String serviceType;
-    
     private String status;
-   
     private String notes;
 
+    public PetOwner getOwner() {
+    return owner;
+    }   
 
+    public void setOwner(PetOwner owner) {
+    this.owner = owner;
+    }
+
+    
     
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

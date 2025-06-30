@@ -1,9 +1,16 @@
 package com.example.backend.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 //add foreign key for Pet and Appointment
@@ -18,11 +25,16 @@ public class PetOwner {
     private String firstname;
     private String lastname;
     private String email;
-    private String phoneNumber;
+    @Column(name = "phoneNumber")
+private String phoneNumber;
+
     private String address;
     private String password; // ✅ added
     // private String petId;
     // private String appointmentId;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Appointment> appointments;
 
     // --- Getters and Setters ---
 
@@ -81,4 +93,12 @@ public class PetOwner {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public List<Appointment> getAppointments() {
+    return appointments;
+}
+
+public void setAppointments(List<Appointment> appointments) {
+    this.appointments = appointments;
+}
 }

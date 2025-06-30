@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import { createAppointment } from '../api/appointment';
 import './AppointmentForm.css';
-import TreatmentList from '../pages/TreatmentList';
 import { Link } from 'react-router-dom';
 
 const AppointmentForm = ({ onClose, onSuccess }) => {
@@ -23,7 +22,8 @@ const AppointmentForm = ({ onClose, onSuccess }) => {
     time: '',
     serviceType: '',
     status: 'Pending',
-    notes: ''
+    notes: '',
+    ownerId: null // ✅ Add ownerId
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(true); // default true to avoid flicker
@@ -32,23 +32,35 @@ const AppointmentForm = ({ onClose, onSuccess }) => {
     const user = localStorage.getItem('petOwner');
     if (!user) {
       setIsAuthenticated(false);
+      return;
     }
+
+    const parsedUser = JSON.parse(user);
+    setFormData((prev) => ({
+      ...prev,
+      ownerId: parsedUser.id, // ✅ set ownerId from localStorage
+    }));
   }, []);
 
   const handleSubmit = async () => {
-    try {
-      await createAppointment({
-        ...formData,
-        date: formData.date,
-        time: formData.time,
-      });
-      alert('Appointment created successfully!');
-      if (onSuccess) onSuccess();
-    } catch (err) {
-      console.error(err);
-      alert('Failed to submit appointment.');
+  try {
+    if (!formData.ownerId) {
+      alert('Owner ID missing. Please log in again.');
+      return;
     }
-  };
+
+    await createAppointment({
+      ...formData,
+      owner: { id: formData.ownerId } // ✅ Wrap ownerId into an object
+    });
+
+    alert('Appointment created successfully!');
+    if (onSuccess) onSuccess();
+  } catch (err) {
+    console.error(err);
+    alert('Failed to submit appointment.');
+  }
+};
 
   return (
     <Paper elevation={4} className="appointment-container">

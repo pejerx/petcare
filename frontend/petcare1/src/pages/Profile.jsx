@@ -13,7 +13,7 @@ const Profile = () => {
     firstname: '',
     lastname: '',
     email: '',
-    phonenumber: '',
+    phoneNumber: '',
     address: '',
   });
 
@@ -23,34 +23,35 @@ const Profile = () => {
   const storedUser = JSON.parse(localStorage.getItem('petOwner'));
   const email = storedUser?.email;
 
-  useEffect(() => {
-    if (!email) {
-      alert('You must be logged in to view this page.');
-      navigate('/login');
-      return;
-    }
+ useEffect(() => {
+  if (!email) {
+    alert('You must be logged in to view this page.');
+    navigate('/login');
+    return;
+  }
 
-    axios.get(`http://localhost:8080/api/petowners/email/${email}`)
-      .then((res) => {
-        const data = res.data;
-        setProfile({
-          firstname: data.firstname,
-          lastname: data.lastname,
-          email: data.email,
-          phonenumber: data.phonenumber,
-          address: data.address,
-        });
-        setPetOwnerId(data.id);
-      })
-      .catch(() => {
-        alert('PetOwner not found!');
+  axios.get(`http://localhost:8080/api/petowners/email/${email}`)
+    .then((res) => {
+      const data = res.data;
+      setProfile({
+        firstname: data.firstname,
+        lastname: data.lastname,
+        email: data.email,
+        phoneNumber: data.phoneNumber, // ✅ make sure to use correct casing
+        address: data.address,
       });
+      setPetOwnerId(data.id);
 
-    axios.get('http://localhost:8080/api/appointments')
-      .then((res) => {
-        setHistory(res.data);
-      });
-  }, []);
+      // 👇 NOW we can use data.id to fetch appointments
+      return axios.get(`http://localhost:8080/api/appointments/owner/${data.id}`);
+    })
+    .then((res) => {
+      setHistory(res.data);
+    })
+    .catch(() => {
+      alert('PetOwner not found or appointments could not be loaded!');
+    });
+}, []);
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
@@ -71,7 +72,7 @@ const Profile = () => {
       axios.put(`http://localhost:8080/api/appointments/${id}`, { ...oldData, date: newDate })
         .then(() => {
           alert('Appointment updated');
-          axios.get('http://localhost:8080/api/appointments')
+          axios.get(`http://localhost:8080/api/appointments/owner/${petOwnerId}`)
             .then((res) => setHistory(res.data));
         });
     }
@@ -139,8 +140,8 @@ const Profile = () => {
             <TextField
               fullWidth
               label="Phone Number"
-              name="phonenumber"
-              value={profile.phonenumber}
+              name="phoneNumber"
+              value={profile.phoneNumber}
               onChange={handleChange}
               disabled={!isEditing}
               margin="normal"

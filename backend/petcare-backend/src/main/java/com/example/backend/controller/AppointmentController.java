@@ -45,6 +45,12 @@ public class AppointmentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<List<Appointment>> getAppointmentsByOwner(@PathVariable Long ownerId) {
+    return ResponseEntity.ok(service.getAppointmentsByOwner(ownerId));
+    }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<Appointment> update(@PathVariable Long id, @RequestBody Appointment appointment) {
         Appointment updated = service.update(id, appointment);
