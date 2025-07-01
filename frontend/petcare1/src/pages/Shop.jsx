@@ -1,5 +1,6 @@
 // Shop.jsx
-import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { getProducts } from '../api/product';
 import './Shop.css';
 import Header from '../components/Header';
 import {
@@ -22,18 +23,14 @@ const categories = [
   'Dental Care Products', 'Calming Aids',
 ];
 
-const generateProducts = (category) => {
+/*const generateProducts = (category) => {
   return Array.from({ length: 20 }, (_, i) => ({
     id: `${category}-${i + 1}`,
     title: `${category} Item ${i + 1}`,
-    price: `$${(Math.random() * 30 + 10).toFixed(2)}`,
-    description: `Top quality ${category.toLowerCase()} for your pet's needs.`,
-    category,
-    image: `https://place-puppy.com/30${i % 10}x30${i % 10}`,
-  }));
+    }));
 };
 
-const allProducts = categories.flatMap(generateProducts);
+const allProducts = categories.flatMap(generateProducts);*/
 
 const chunkArray = (array, size) => {
   return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
