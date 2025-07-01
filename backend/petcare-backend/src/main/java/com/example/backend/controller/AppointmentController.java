@@ -47,7 +47,7 @@ public class AppointmentController {
 
     @GetMapping("/owner/{ownerId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByOwner(@PathVariable Long ownerId) {
-    return ResponseEntity.ok(service.getAppointmentsByOwner(ownerId));
+        return ResponseEntity.ok(service.getAppointmentsByOwner(ownerId));
     }
 
 

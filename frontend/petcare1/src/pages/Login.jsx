@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Tabs, Tab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import logo from '/src/assets/fetch_and_fur_logo1.png';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [role, setRole] = useState('petowner'); // 'petowner' or 'veterinarian'
 
   const [form, setForm] = useState({
     email: '',
@@ -21,6 +22,7 @@ const Login = () => {
       ...form,
       [e.target.name]: e.target.value,
     });
+    setError('');
   };
 
   const handleLogin = async () => {
@@ -32,20 +34,24 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:8080/api/petowners/login', {
+      const endpoint =
+        role === 'petowner'
+          ? 'http://localhost:8080/api/petowners/login'
+          : 'http://localhost:8080/api/veterinarians/login';
+
+      const res = await axios.post(endpoint, {
         email: form.email,
         password: form.password,
       });
 
-      
-      // Save user info in local storage
-      localStorage.setItem('petOwner', JSON.stringify(res.data));
+      // Store user info in localStorage
+      const userKey = role === 'petowner' ? 'petOwner' : 'veterinarian';
+      localStorage.setItem(userKey, JSON.stringify(res.data));
 
-      localStorage.setItem('user', JSON.stringify({ name: res.data.name || 'Pet Owner' }));
+      localStorage.setItem('user', JSON.stringify({ email: form.email, role }));
       window.dispatchEvent(new Event('storageChange'));
 
-      // Navigate to profile
-      navigate('/profile');
+      navigate(role === 'petowner' ? '/profile' : '/vet-dashboard');
     } catch (err) {
       setError('Invalid email or password. Please try again.');
     }
@@ -57,9 +63,14 @@ const Login = () => {
       <div className="login-container">
         <div className="login-left">
           <h2 className="brand">
-            <img src={logo} width={150} height={40} alt="Logo"/>
+            <img src={logo} width={150} height={40} alt="Logo" />
           </h2>
           <h1>Login</h1>
+
+          <Tabs value={role} onChange={(e, newVal) => setRole(newVal)} sx={{ mb: 2 }}>
+            <Tab label="Pet Owner" value="petowner" />
+            <Tab label="Veterinarian" value="veterinarian" />
+          </Tabs>
 
           <TextField
             label="Email"

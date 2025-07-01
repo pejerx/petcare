@@ -19,6 +19,7 @@ import Profile from './pages/Profile';
 import Shop from './pages/Shop';
 import AppointmentList from './pages/AppointmentList';
 import Veterinarian from './pages/Veterinarians';
+import VetDashboard from './pages/VeterinarianDashboard';
 
 import Header from './components/Header';
 import AppointmentForm from './components/AppointmentForm';
@@ -74,8 +75,9 @@ function Home({ setAppointmentOpen }) {
               position: 'relative',
               cursor: 'pointer'
             }}
-            onClick={() => alert('Join Rewards')}
           >
+             
+
             <div style={{
               position: 'absolute',
               bottom: '20px',
@@ -86,7 +88,8 @@ function Home({ setAppointmentOpen }) {
             }}>
               <h3>Meet the Protectors</h3>
               <p>Get to know your furry babies' Veterinarians!</p>
-              <Button variant="contained" size="small" sx={{ mt: 1 }}>Join Rewards</Button>
+              
+               <Button variant="contained" onClick={() => navigate('/veterinarians')}>Veterinarian</Button>
             </div>
           </div>
 
@@ -275,6 +278,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/veterinarians" element={<Veterinarian />} />
+        <Route path="/vet-dashboard" element={<VetDashboard />} />
+
 
         <Route
           path="/profile"
