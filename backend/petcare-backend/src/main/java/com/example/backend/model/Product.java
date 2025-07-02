@@ -15,17 +15,29 @@ public class Product {
     private String productName;
     private String productDescription;
     private Double price;
+    private int quantity;
+    
     private String imageUrl;
     
-    public Product() {
-    }
-    
-    public Product(Long productId, String productName, String productDescription, Double price, String imageUrl) {
+    public Product(Long productId, String productName, String productDescription, Double price, int quantity,
+            String imageUrl) {
         this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
         this.price = price;
+        this.quantity = quantity;
         this.imageUrl = imageUrl;
+    }
+
+
+    public Product() {
+    }
+    
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
     public Long getProductId() {
         return productId;

@@ -1,6 +1,6 @@
 // Shop.jsx
 import { useEffect } from 'react';
-import { getProducts } from '../api/product';
+import { getProducts } from '../api/products';
 import './Shop.css';
 import Header from '../components/Header';
 import {
@@ -23,14 +23,14 @@ const categories = [
   'Dental Care Products', 'Calming Aids',
 ];
 
-/*const generateProducts = (category) => {
+const generateProducts = (category) => {
   return Array.from({ length: 20 }, (_, i) => ({
     id: `${category}-${i + 1}`,
     title: `${category} Item ${i + 1}`,
     }));
 };
 
-const allProducts = categories.flatMap(generateProducts);*/
+const allProducts = categories.flatMap(generateProducts);
 
 const chunkArray = (array, size) => {
   return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
