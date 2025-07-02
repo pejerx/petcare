@@ -32,19 +32,23 @@ const PetRegister = () => {
   };
 
   const handleSubmit = async () => {
-    try {
-      await createPet({
-        ...formData,
-        date: formData.date, 
-        time: formData.time,
-      });
-      alert('Pet submitted successfully!');
-      navigate('/profile');
-    } catch (err) {
-      console.error(err);
-      alert('Failed to register pet.');
-    }
-  };
+  try {
+    await createPet({
+      petname: formData.petName,
+      type: formData.type,
+      weight: parseFloat(formData.weight),
+      breed: formData.breed,
+      notes: formData.notes,
+      status: formData.status
+    });
+    alert('Pet submitted successfully!');
+    navigate('/profile');
+  } catch (err) {
+    console.error(err);
+    alert('Failed to register pet.');
+  }
+};
+
 
   return (
     <>
@@ -64,12 +68,12 @@ const PetRegister = () => {
               <Grid item xs={12} md={6}>
                 <InputLabel className="input-label">Pet Name</InputLabel>
                 <TextField
-                  className="textfield-long"
-                   fullWidth
-                   value={formData.petName}
-                   onChange={(e) => setFormData({ ...formData, petName: e.target.value })}
-                   placeholder="e.g. Max"
-                   />
+        className="textfield-long"
+        fullWidth
+        value={formData.weight}
+        onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+        placeholder="10 pounds"
+      />
 
                 <Box mt={3}>
                   <InputLabel className="input-label">Type of Animal</InputLabel>
@@ -92,7 +96,7 @@ const PetRegister = () => {
                    fullWidth
                    value={formData.petName}
                    onChange={(e) => setFormData({ ...formData, petName: e.target.value })}
-                   placeholder="e.g. Max"
+                   placeholder="10 pounds"
                    />
                 </Box>
               </Grid>
